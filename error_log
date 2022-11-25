@@ -1,0 +1,1 @@
+[13-Nov-2022 00:04:27 America/Toronto] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.4.0". You are running 7.2.34. in /home/dalstore/public_html/dal/vendor/composer/platform_check.php on line 24
