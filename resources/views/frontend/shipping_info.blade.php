@@ -19,12 +19,12 @@
                             <h3 class="fs-14 fw-600 d-none d-lg-block ">{{ translate('2. Shipping info')}}</h3>
                         </div>
                     </div>
-                    <div class="col">
+                    {{-- <div class="col">
                         <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-truck"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block opacity-50 ">{{ translate('3. Delivery info')}}</h3>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col">
                         <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-credit-card"></i>
@@ -62,28 +62,36 @@
                                                 <span class="aiz-rounded-check flex-shrink-0 mt-1"></span>
                                                 <span class="flex-grow-1 pl-3 text-left">
                                                     <div>
-                                                        <span class="opacity-60">{{ translate('Address') }}:</span>
-                                                        <span class="fw-600 ml-2">{{ $address->address }}</span>
+                                                        <span class="w-50 fw-600">{{ translate('City') }}:</span>
+                                                        <span class="ml-2">{{ optional($address->city)->name }}</span>
                                                     </div>
                                                     <div>
-                                                        <span class="opacity-60">{{ translate('Postal Code') }}:</span>
-                                                        <span class="fw-600 ml-2">{{ $address->postal_code }}</span>
+                                                        <span class="w-50 fw-600">{{ translate('State') }}:</span>
+                                                        <span class="ml-2">{{ optional($address->state)->name }}</span>
                                                     </div>
                                                     <div>
-                                                        <span class="opacity-60">{{ translate('City') }}:</span>
-                                                        <span class="fw-600 ml-2">{{ optional($address->city)->name }}</span>
+                                                        <span class="w-50 fw-600">{{ translate('Country') }}:</span>
+                                                        <span class="ml-2">{{ optional($address->country)->name }}</span>
                                                     </div>
                                                     <div>
-                                                        <span class="opacity-60">{{ translate('State') }}:</span>
-                                                        <span class="fw-600 ml-2">{{ optional($address->state)->name }}</span>
+                                                        <span class="w-50 fw-600">{{ translate('Phone') }}:</span>
+                                                        <span class="ml-2">{{ $address->phone }}</span>
                                                     </div>
                                                     <div>
-                                                        <span class="opacity-60">{{ translate('Country') }}:</span>
-                                                        <span class="fw-600 ml-2">{{ optional($address->country)->name }}</span>
+                                                        <span class="w-50 fw-600">{{ translate('block') }}:</span>
+                                                        <span class="ml-2">{{ $address->block }}</span>
                                                     </div>
                                                     <div>
-                                                        <span class="opacity-60">{{ translate('Phone') }}:</span>
-                                                        <span class="fw-600 ml-2">{{ $address->phone }}</span>
+                                                        <span class="w-50 fw-600">{{ translate('street') }}:</span>
+                                                        <span class="ml-2">{{ $address->street }}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="w-50 fw-600">{{ translate('house') }}:</span>
+                                                        <span class="ml-2">{{ $address->house }}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="w-50 fw-600">{{ translate('avenue') }}:</span>
+                                                        <span class="ml-2">{{ $address->avenue }}</span>
                                                     </div>
                                                 </span>
                                             </span>

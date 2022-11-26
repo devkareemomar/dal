@@ -18,12 +18,12 @@
                                 <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('2. Shipping info') }}</h3>
                             </div>
                         </div>
-                        <div class="col done">
+                        {{-- <div class="col done">
                             <div class="text-success text-center">
                                 <i class="la-3x las la-truck mb-2"></i>
                                 <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('3. Delivery info') }}</h3>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col active">
                             <div class="text-primary text-center">
                                 <i class="la-3x las la-credit-card mb-2"></i>

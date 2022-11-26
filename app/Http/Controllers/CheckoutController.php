@@ -13,6 +13,7 @@ use App\Models\Address;
 use App\Models\Carrier;
 use App\Models\CombinedOrder;
 use App\Models\Product;
+use App\Models\User;
 use App\Utility\PayhereUtility;
 use App\Utility\NotificationUtility;
 use Session;
@@ -143,7 +144,10 @@ class CheckoutController extends Controller
             $carrier_list = $carrier_query->get();
         }
 
-        return view('frontend.delivery_info', compact('carts','carrier_list'));
+        $user_id = User::where('user_type', 'admin')->first()->id;
+        $request['shipping_type_'.$user_id] = 'home_delivery';
+        return $this->store_delivery_info($request);
+        // return view('frontend.delivery_info', compact('carts','carrier_list'));
     }
 
     public function store_delivery_info(Request $request)
@@ -163,6 +167,7 @@ class CheckoutController extends Controller
         $subtotal = 0;
 
         if ($carts && count($carts) > 0) {
+
             foreach ($carts as $key => $cartItem) {
                 $product = Product::find($cartItem['product_id']);
                 $tax += cart_product_tax($cartItem, $product,false) * $cartItem['quantity'];

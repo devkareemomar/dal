@@ -3,10 +3,10 @@
     <div class="p-3">
         <div class="row">
             <div class="col-md-2">
-                <label>{{ translate('Address')}}</label>
+                <label>{{ translate('Phone')}}</label>
             </div>
             <div class="col-md-10">
-                <textarea class="form-control mb-3" placeholder="{{ translate('Your Address')}}" rows="2" name="address" required>{{ $address_data->address }}</textarea>
+                <input type="text" class="form-control mb-3" placeholder="{{ translate('+880')}}" value="{{ $address_data->phone }}" name="phone"  required>
             </div>
         </div>
         <div class="row">
@@ -57,7 +57,7 @@
             </div>
         </div>
         
-        @if (get_setting('google_map') == 1)
+        {{-- @if (get_setting('google_map') == 1)
             <div class="row">
                 <input id="edit_searchInput" class="controls" type="text" placeholder="Enter a location">
                 <div id="edit_map"></div>
@@ -86,24 +86,41 @@
                     <input type="text" class="form-control mb-3" id="edit_latitude" name="latitude" value="{{ $address_data->latitude }}" readonly="">
                 </div>
             </div>
-        @endif
+        @endif --}}
         
         <div class="row">
             <div class="col-md-2">
-                <label>{{ translate('Postal code')}}</label>
+                <label>{{ translate('block')}}</label>
             </div>
             <div class="col-md-10">
-                <input type="text" class="form-control mb-3" placeholder="{{ translate('Your Postal Code')}}" value="{{ $address_data->postal_code }}" name="postal_code" value="" required>
+                <input type="text" class="form-control mb-3" placeholder="{{ translate('block')}}" value="{{ $address_data->block }}" name="block" required>
             </div>
         </div>
         <div class="row">
             <div class="col-md-2">
-                <label>{{ translate('Phone')}}</label>
+                <label>{{ translate('street')}}</label>
             </div>
             <div class="col-md-10">
-                <input type="text" class="form-control mb-3" placeholder="{{ translate('+880')}}" value="{{ $address_data->phone }}" name="phone" value="" required>
+                <input type="text" class="form-control mb-3" placeholder="{{ translate('street')}}" value="{{ $address_data->street }}" name="street" required>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label>{{ translate('house')}}</label>
+            </div>
+            <div class="col-md-10">
+                <input type="text" class="form-control mb-3" placeholder="{{ translate('house')}}" value="{{ $address_data->house }}" name="house"  required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label>{{ translate('avenue')}}</label>
+            </div>
+            <div class="col-md-10">
+                <input type="text" class="form-control mb-3" placeholder="{{ translate('avenue')}}" value="{{ $address_data->avenue }}" name="avenue"  required>
+            </div>
+        </div>
+      
         <div class="form-group text-right">
             <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
         </div>

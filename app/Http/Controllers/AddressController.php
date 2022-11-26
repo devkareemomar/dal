@@ -53,6 +53,10 @@ class AddressController extends Controller
         $address->latitude      = $request->latitude;
         $address->postal_code   = $request->postal_code;
         $address->phone         = $request->phone;
+        $address->block         = $request->block;
+        $address->street         = $request->street;
+        $address->house         = $request->house;
+        $address->avenue         = $request->avenue;
         $address->save();
 
         return back();
@@ -105,7 +109,10 @@ class AddressController extends Controller
         $address->latitude      = $request->latitude;
         $address->postal_code   = $request->postal_code;
         $address->phone         = $request->phone;
-
+        $address->block         = $request->block;
+        $address->street         = $request->street;
+        $address->house         = $request->house;
+        $address->avenue         = $request->avenue;
         $address->save();
 
         flash(translate('Address info updated successfully'))->success();

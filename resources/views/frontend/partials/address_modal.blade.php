@@ -13,10 +13,10 @@
                     <div class="p-3">
                         <div class="row">
                             <div class="col-md-2">
-                                <label>{{ translate('Address')}}</label>
+                                <label>{{ translate('Phone')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <textarea class="form-control mb-3" placeholder="{{ translate('Your Address')}}" rows="2" name="address" required></textarea>
+                                <input type="text" class="form-control mb-3" placeholder="{{ translate('+880')}}" name="phone" value="" required>
                             </div>
                         </div>
                         <div class="row">
@@ -57,7 +57,7 @@
                             </div>
                         </div>
 
-                        @if (get_setting('google_map') == 1)
+                        {{-- @if (get_setting('google_map') == 1)
                             <div class="row">
                                 <input id="searchInput" class="controls" type="text" placeholder="{{translate('Enter a location')}}">
                                 <div id="map"></div>
@@ -86,24 +86,45 @@
                                     <input type="text" class="form-control mb-3" id="latitude" name="latitude" readonly="">
                                 </div>
                             </div>
-                        @endif
+                        @endif --}}
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('block')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control mb-3" placeholder="{{ translate('block')}}" name="block" value="" required>
+                            </div>
+                        </div>
                         
                         <div class="row">
                             <div class="col-md-2">
-                                <label>{{ translate('Postal code')}}</label>
+                                <label>{{ translate('street')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <input type="text" class="form-control mb-3" placeholder="{{ translate('Your Postal Code')}}" name="postal_code" value="" required>
+                                <input type="text" class="form-control mb-3" placeholder="{{ translate('street')}}" name="street" value="" required>
                             </div>
                         </div>
+                    
                         <div class="row">
                             <div class="col-md-2">
-                                <label>{{ translate('Phone')}}</label>
+                                <label>{{ translate('house')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <input type="text" class="form-control mb-3" placeholder="{{ translate('+880')}}" name="phone" value="" required>
+                                <input type="text" class="form-control mb-3" placeholder="{{ translate('house')}}" name="house" value="" required>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('avenue')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control mb-3" placeholder="{{ translate('avenue')}}" name="avenue" value="" required>
+                            </div>
+                        </div>
+                    
+
+
                         <div class="form-group text-right">
                             <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
                         </div>

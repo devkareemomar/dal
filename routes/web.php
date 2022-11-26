@@ -240,8 +240,8 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
 
 });
 
-// Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function() {
-    Route::group(['middleware' => ['checkout']], function() {
+Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function() {
+    // Route::group(['middleware' => ['checkout']], function() {
 
     // Checkout Routs
     Route::group(['prefix' => 'checkout'], function() {

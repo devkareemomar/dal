@@ -77,14 +77,6 @@
                     <div class="col-lg-6">
                         <div class="border p-3 pr-5 rounded mb-3 position-relative">
                             <div>
-                                <span class="w-50 fw-600">{{ translate('Address') }}:</span>
-                                <span class="ml-2">{{ $address->address }}</span>
-                            </div>
-                            <div>
-                                <span class="w-50 fw-600">{{ translate('Postal Code') }}:</span>
-                                <span class="ml-2">{{ $address->postal_code }}</span>
-                            </div>
-                            <div>
                                 <span class="w-50 fw-600">{{ translate('City') }}:</span>
                                 <span class="ml-2">{{ optional($address->city)->name }}</span>
                             </div>
@@ -100,6 +92,23 @@
                                 <span class="w-50 fw-600">{{ translate('Phone') }}:</span>
                                 <span class="ml-2">{{ $address->phone }}</span>
                             </div>
+                            <div>
+                                <span class="w-50 fw-600">{{ translate('block') }}:</span>
+                                <span class="ml-2">{{ $address->block }}</span>
+                            </div>
+                            <div>
+                                <span class="w-50 fw-600">{{ translate('street') }}:</span>
+                                <span class="ml-2">{{ $address->street }}</span>
+                            </div>
+                            <div>
+                                <span class="w-50 fw-600">{{ translate('house') }}:</span>
+                                <span class="ml-2">{{ $address->house }}</span>
+                            </div>
+                            <div>
+                                <span class="w-50 fw-600">{{ translate('avenue') }}:</span>
+                                <span class="ml-2">{{ $address->avenue }}</span>
+                            </div>
+
                             @if ($address->set_default)
                                 <div class="position-absolute right-0 bottom-0 pr-2 pb-3">
                                     <span class="badge badge-inline badge-primary">{{ translate('Default') }}</span>

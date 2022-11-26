@@ -54,6 +54,7 @@ class InvoiceController extends Controller
             // general for all
             $font_family = "'Roboto','sans-serif'";
         }
+        $font_family = "'Cairo','sans-serif'";
         
         // $config = ['instanceConfigurator' => function($mpdf) {
         //     $mpdf->showImageErrors = true;

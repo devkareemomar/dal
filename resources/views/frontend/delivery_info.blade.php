@@ -19,12 +19,12 @@
                             <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('2. Shipping info')}}</h3>
                         </div>
                     </div>
-                    <div class="col active">
+                    {{-- <div class="col active">
                         <div class="text-center text-primary">
                             <i class="la-3x mb-2 las la-truck"></i>
                             <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('3. Delivery info')}}</h3>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col">
                         <div class="text-center">
                             <i class="la-3x mb-2 opacity-50 las la-credit-card"></i>
@@ -67,7 +67,7 @@
                                 $seller_products[$product->user_id] = $product_ids;
                             }
                         }
-						
+
 						$pickup_point_list = array();
 						if (get_setting('pickup_point') == 1) {
 							$pickup_point_list = \App\Models\PickupPoint::where('pick_up_status',1)->get();
@@ -164,7 +164,7 @@
                                                 </label>
                                             </div>
                                             @endif
-                                            
+
                                         </div>
                                         @if ($pickup_point_list)
                                         <div class="mt-4 pickup_point_id_admin d-none">
@@ -338,7 +338,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        
+
                                         @if (get_setting('shipping_type') == 'carrier_wise_shipping')
                                             <div class="row pt-3 carrier_id_{{ $key }}">
                                                 @foreach($carrier_list as $carrier_key => $carrier)

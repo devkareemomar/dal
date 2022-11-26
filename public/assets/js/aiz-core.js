@@ -1354,10 +1354,12 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
         zoom: function(){
             if($('.img-zoom')[0]){
                 $('.img-zoom').zoom({
-                    magnify:1.5
+                    magnify:2
                 });
                 if((('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0))){
-                    $('.img-zoom').trigger('zoom.destroy');
+                    $('.img-zoom').zoom({
+                        magnify:2
+                    });
                 }
             }
         },
