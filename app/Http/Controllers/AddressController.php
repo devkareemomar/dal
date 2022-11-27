@@ -61,6 +61,30 @@ class AddressController extends Controller
 
         return back();
     }
+    public function guestStore(Request $request)
+    {
+        $address = new Address;
+        if($request->has('customer_id')){
+            $address->user_id   = $request->customer_id;
+        }
+        else{
+            $address->user_id   = Auth::user()->id;
+        }
+        $address->address       = $request->address;
+        $address->country_id    = $request->country_id;
+        $address->state_id      = $request->state_id;
+        $address->city_id       = $request->city_id;
+        $address->longitude     = $request->longitude;
+        $address->latitude      = $request->latitude;
+        $address->postal_code   = $request->postal_code;
+        $address->phone         = $request->phone;
+        $address->block         = $request->block;
+        $address->street        = $request->street;
+        $address->house         = $request->house;
+        $address->avenue        = $request->avenue;
+        $address->save();
+
+    }
 
     /**
      * Display the specified resource.
@@ -84,7 +108,7 @@ class AddressController extends Controller
         $data['address_data'] = Address::findOrFail($id);
         $data['states'] = State::where('status', 1)->where('country_id', $data['address_data']->country_id)->get();
         $data['cities'] = City::where('status', 1)->where('state_id', $data['address_data']->state_id)->get();
-        
+
         $returnHTML = view('frontend.partials.address_edit_modal', $data)->render();
         return response()->json(array('data' => $data, 'html'=>$returnHTML));
 //        return ;
@@ -100,7 +124,7 @@ class AddressController extends Controller
     public function update(Request $request, $id)
     {
         $address = Address::findOrFail($id);
-        
+
         $address->address       = $request->address;
         $address->country_id    = $request->country_id;
         $address->state_id      = $request->state_id;
@@ -139,22 +163,22 @@ class AddressController extends Controller
     public function getStates(Request $request) {
         $states = State::where('status', 1)->where('country_id', $request->country_id)->get();
         $html = '<option value="">'.translate("Select State").'</option>';
-        
+
         foreach ($states as $state) {
             $html .= '<option value="' . $state->id . '">' . $state->name . '</option>';
         }
-        
+
         echo json_encode($html);
     }
-    
+
     public function getCities(Request $request) {
         $cities = City::where('status', 1)->where('state_id', $request->state_id)->get();
         $html = '<option value="">'.translate("Select City").'</option>';
-        
+
         foreach ($cities as $row) {
             $html .= '<option value="' . $row->id . '">' . $row->getTranslation('name') . '</option>';
         }
-        
+
         echo json_encode($html);
     }
 

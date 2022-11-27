@@ -72,8 +72,9 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
+    public function create(array $data)
     {
+        // dd(55);
         if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $user = User::create([
                 'name' => $data['name'],
@@ -94,7 +95,7 @@ class RegisterController extends Controller
                 $otpController->send_code($user);
             }
         }
-        
+
         if(session('temp_user_id') != null){
             Cart::where('temp_user_id', session('temp_user_id'))
                     ->update([

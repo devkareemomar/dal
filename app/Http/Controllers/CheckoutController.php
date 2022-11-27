@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\RegisterController;
 use App\Utility\PayfastUtility;
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -16,8 +17,11 @@ use App\Models\Product;
 use App\Models\User;
 use App\Utility\PayhereUtility;
 use App\Utility\NotificationUtility;
+use Exception;
 use Session;
-use Auth;
+// use Auth;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
@@ -101,26 +105,60 @@ class CheckoutController extends Controller
 
     public function get_shipping_info(Request $request)
     {
+
         $carts = Cart::where('temp_user_id', Session::get('temp_user_id'))->get();
         if(Auth::check()){
             $carts = Cart::where('user_id', Auth::user()->id)->get();
         }
     //    if (Session::has('cart') && count(Session::get('cart')) > 0) {
+        // if ($carts && count($carts) > 0) {
+        //     $categories = Category::all();
+        //     return view('frontend.shipping_info', compact('categories', 'carts'));
+        // }
+        // flash(translate('Your cart is empty'))->success();
+        // return back();
+
         if ($carts && count($carts) > 0) {
             $categories = Category::all();
-            return view('frontend.shipping_info', compact('categories', 'carts'));
-        }
+
+            // dd(55);
+            return view('frontend.shipping_info', compact('categories'));
+        }        throw new Exception('saassaa');
+
         flash(translate('Your cart is empty'))->success();
         return back();
     }
 
     public function store_shipping_info(Request $request)
     {
-        if ($request->address_id == null) {
+        if (!$request->is_guest && $request->address_id == null ) {
             flash(translate("Please add shipping address"))->warning();
             return back();
         }
+        $data =[
+            'name' =>$request->name,
+            'email' =>$request->email,
+            'password' => '123456',
+        ];
 
+        if($request->is_guest){
+                if(User::where('email', $data['email'])->first() != null){
+                    flash(translate('Email or Phone already exists.'));
+                    return back();
+                }
+
+            $register =  new RegisterController();
+            $user =$register->create($data);
+            Auth::loginUsingId($user->id);
+            $address =  new AddressController();
+            $address->store($request);
+            return redirect()->back();
+
+        }
+
+        // dd(Auth::user()->id);
+
+        // dd($carts);
         $carts = Cart::where('user_id', Auth::user()->id)->get();
         if($carts->isEmpty()) {
             flash(translate('Your cart is empty'))->warning();
