@@ -5,7 +5,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @endif
 <head>
-    
+
     <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -475,10 +475,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         function addToCart(){
-            @if(Auth::check() && Auth::user()->user_type != 'customer')
-                AIZ.plugins.notify('warning', "{{ translate('Please Login as a customer to add products to the Cart.') }}");
-                return false;
-            @endif
+            // @if(Auth::check() && Auth::user()->user_type != 'customer')
+            //     AIZ.plugins.notify('warning', "{{ translate('Please Login as a customer to add products to the Cart.') }}");
+            //     return false;
+            // @endif
 
             if(checkAddToCartValidity()) {
                 $('#addToCart').modal();

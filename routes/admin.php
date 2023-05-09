@@ -307,6 +307,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     // Order
     Route::resource('orders', OrderController::class);
     Route::controller(OrderController::class)->group(function () {
+        // Route::get('/updateOrderShippingAddress', 'updateOrderShippingAddress')->name('updateOrderShippingAddress');
+
+
         // All Orders
         Route::get('/all_orders', 'all_orders')->name('all_orders.index');
         Route::get('/inhouse-orders', 'all_orders')->name('inhouse_orders.index');

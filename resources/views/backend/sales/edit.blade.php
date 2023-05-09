@@ -109,8 +109,8 @@
             </div>
             <div class="mb-3">
                 @php
-                    $removedXML = '<?xml version="1.0" encoding="UTF-8"@endphp';
-                @endphp
+                $removedXML = '<?xml version="1.0" encoding="UTF-8"@endphp';
+                ?>
                 {!! str_replace($removedXML, '', QrCode::size(100)->generate($order->code)) !!}
             </div>
             <div class="row gutters-5">
@@ -368,11 +368,10 @@
                                 </td>
                                 <td>
                                     <input type="hidden" class="form-control" id="shipping_cost" name="shipping_cost"
-                                        value="{{ $order->orderDetails->sum('shipping_cost') }}">
+                                        value="{{ $order->shipping_cost }}">
 
-                                    {{ single_price($order->orderDetails->sum('shipping_cost')) }}
+                                    {{ single_price($order->shipping_cost) }}
 
-                                    {{-- {{ single_price($order->orderDetails->first()->shipping_cost) }} --}}
                                 </td>
                             </tr>
                             <tr>

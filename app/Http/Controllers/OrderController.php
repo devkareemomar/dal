@@ -20,6 +20,7 @@ use App\Models\SmsTemplate;
 use Auth;
 use Mail;
 use App\Mail\InvoiceEmailManager;
+use App\Models\City;
 use App\Utility\NotificationUtility;
 use App\Utility\SmsUtility;
 use DB;
@@ -271,6 +272,7 @@ class OrderController extends Controller
             }
 
             $order->grand_total = $subtotal + $tax + $shipping;
+            $order->shipping_cost =  $shipping;
 
             if ($seller_product[0]->coupon_code != null) {
                 $order->coupon_discount = $coupon_discount;
@@ -436,6 +438,8 @@ class OrderController extends Controller
             $order->grand_total = $subtotal + $tax + $shipping;
             $order->payment_type = 'cash_on_delivery';
             $order->payment_status = $request->payment_status;
+            $order->shipping_cost =  $shipping;
+
             // dd( 55 );
 
             $combined_order->grand_total += $order->grand_total;
@@ -500,6 +504,7 @@ class OrderController extends Controller
 
         $order->viewed = 1;
         $order->save();
+        // dd($order->orderDetails);
         return view('backend.sales.edit', compact('order', 'delivery_boys'));
     }
 
@@ -518,6 +523,7 @@ class OrderController extends Controller
         $shipping_cost = $request->shipping_cost / count($request->items);
 
         $tax = $request->tax;
+        // dd($request->items);
         if (isset($request->items)) {
             $orderDetails = collect($request->items)->mapWithKeys(function ($item) use ($order_id, $shipping_cost, $tax) {
                 $product = Product::find($item['id']);
@@ -542,10 +548,18 @@ class OrderController extends Controller
                     'shipping_type' => 'home_delivery',
                 ]];
             })->toArray();
-            $order->orderProductDetails()->sync($orderDetails);
+            OrderDetail::where('order_id', $order->id)->delete();
+            $subtotal =0;
+            foreach ($orderDetails as $detail) {
+                $subtotal += $detail['price'];
+                OrderDetail::create($detail);
+            }
+            // $order->orderProductDetails()->sync($orderDetails);
         }
 
-        $order->grand_total = $request->grand_total;
+        $order->grand_total = $subtotal+$request->shipping_cost;
+        $order->shipping_cost =  $request->shipping_cost;
+
         $order->save();
 
         flash(translate('order updated '));
@@ -553,6 +567,17 @@ class OrderController extends Controller
         return redirect()->back();
     }
 
+    public function updateOrderShippingAddress()
+    {
+        $orders = Order::all();
+
+        foreach($orders as $order){
+           $cost =  City::where('name',json_decode($order->shipping_address,true)['city'])->first()->cost;
+        //    dd($cost);
+           Order::findOrFail($order->id)->update(['shipping_cost' => $cost]);
+
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
