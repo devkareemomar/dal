@@ -320,7 +320,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
         Route::get('/orders/create', 'create')->name('all_orders.create');
         Route::get('/orders/{id}/edit', 'edit')->name('all_orders.edit');
         Route::get('/orders/search/{value?}', 'search')->name('products.search');
-        Route::get('/orders/additem/{item_id?}', 'additem')->name('products.additem');
+        Route::get('/orders/additem/{item_id?}/{length?}', 'additem')->name('products.additem');
 
         Route::get('/inhouse-orders/{id}/show', 'show')->name('inhouse_orders.show');
         Route::get('/seller_orders/{id}/show', 'show')->name('seller_orders.show');

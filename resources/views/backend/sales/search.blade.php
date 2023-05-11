@@ -36,22 +36,23 @@ style="overflow-y: scroll;height: 350px; background-color: #fff; border: solid 2
     $(".item").on('click',function(){
 
         var item_id = $(this).attr('item_id');
+        var length = $('.items').length+1;
         $.ajax({
                 type: 'get',
-                url: "{{url('admin/orders/additem/')}}"+'/'+item_id,
+                url: "{{url('admin/orders/additem/')}}"+'/'+item_id+'/'+length,
                 success: function (data) {
 
                     var db = $('.itemid').map(function (i, n) {
                                return $(n).val();
                                 }).get();
 
-                if(db.includes(item_id)){
-                    alert("{{translate('this product has already been added')}}")
-                }else{
+                // if(db.includes(item_id)){
+                    // alert("{{translate('this product has already been added')}}")
+                // }else{
                     $('.item-table').append(data);
                      $('.widget-content-area').remove();
                 	calculateTotal();
-                }
+                // }
 
                     },
                 error: function(data_error, exception) {

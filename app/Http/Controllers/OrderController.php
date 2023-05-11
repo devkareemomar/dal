@@ -525,7 +525,37 @@ class OrderController extends Controller
         $tax = $request->tax;
         // dd($request->items);
         if (isset($request->items)) {
-            $orderDetails = collect($request->items)->mapWithKeys(function ($item) use ($order_id, $shipping_cost, $tax) {
+            // $orderDetails = collect($request->items)->mapWithKeys(function ($item) use ($order_id, $shipping_cost, $tax) {
+            //     $product = Product::find($item['id']);
+            //     $product->num_of_sale += $item['quantity'];
+            //     $product->save();
+
+            //     $product_variation = null;
+            //     if (isset($item['color'])) {
+            //         $product_variation = isset($item['attribute']) ? $item['color'] . '-' . $item['attribute'] : $item['color'];
+            //     } elseif (isset($item['attribute'])) {
+            //         $product_variation = isset($item['color']) ? $item['attribute'] . '-' . $item['color'] : $item['attribute'];
+            //     }
+            //     return [$item['id'] => [
+            //         'order_id' => $order_id,
+            //         'product_id' => $item['id'],
+            //         'seller_id' => $product->user_id,
+            //         'variation' => $product_variation,
+            //         'price' => $item['total'],
+            //         'quantity' => $item['quantity'],
+            //         'tax' => $tax,
+            //         'shipping_cost' => $shipping_cost,
+            //         'shipping_type' => 'home_delivery',
+            //     ]];
+            // })->toArray();
+
+
+
+
+            OrderDetail::where('order_id', $order->id)->delete();
+            $subtotal =0;
+            foreach ($request->items as $item) {
+
                 $product = Product::find($item['id']);
                 $product->num_of_sale += $item['quantity'];
                 $product->save();
@@ -536,7 +566,8 @@ class OrderController extends Controller
                 } elseif (isset($item['attribute'])) {
                     $product_variation = isset($item['color']) ? $item['attribute'] . '-' . $item['color'] : $item['attribute'];
                 }
-                return [$item['id'] => [
+
+                $orderDetails =  [
                     'order_id' => $order_id,
                     'product_id' => $item['id'],
                     'seller_id' => $product->user_id,
@@ -546,16 +577,13 @@ class OrderController extends Controller
                     'tax' => $tax,
                     'shipping_cost' => $shipping_cost,
                     'shipping_type' => 'home_delivery',
-                ]];
-            })->toArray();
-            OrderDetail::where('order_id', $order->id)->delete();
-            $subtotal =0;
-            foreach ($orderDetails as $detail) {
-                $subtotal += $detail['price'];
-                OrderDetail::create($detail);
+                ];
+                $subtotal += $item['total'];
+                OrderDetail::create($orderDetails);
             }
             // $order->orderProductDetails()->sync($orderDetails);
         }
+        // dd($subtotal);
 
         $order->grand_total = $subtotal+$request->shipping_cost;
         $order->shipping_cost =  $request->shipping_cost;
@@ -731,11 +759,11 @@ class OrderController extends Controller
     } // end of search
 
 
-    public function additem($id)
+    public function additem($id,$length)
     {
         $product =  Product::findOrFail($id);
         // dd($value);
-        return view('backend.sales.product_details', compact('product'));
+        return view('backend.sales.product_details', compact('product','length'));
     } // end of search
 
     private function update_delivery($request, $status, $order_id)

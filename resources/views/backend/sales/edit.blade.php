@@ -223,8 +223,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($order->orderDetails as $key => $orderDetail)
-                                    <tr id="{{ $key + 1 }}">
+                                @foreach ($order->orderDetails as $main_key => $orderDetail)
+                                    <tr id="{{ $main_key + 1 }}">
                                         <td><input class="case" type="checkbox" /></td>
 
 
@@ -232,14 +232,14 @@
 
 
                                             <input type="hidden" id="item_1"
-                                                name="items[{{ $orderDetail->product_id }}][detail_id]"
+                                                name="items[{{$main_key}}][detail_id]"
                                                 value="{{ $orderDetail->id }}"
-                                                class=" form-control form-control-sm search itemid item_id1"
+                                                class=" form-control form-control-sm search itemid items"
                                                 placeholder="@lang('site.item')" autocomplete="off">
                                             <input type="hidden" id="item_1"
-                                                name="items[{{ $orderDetail->product_id }}][id]"
+                                                name="items[{{$main_key}}][id]"
                                                 value="{{ $orderDetail->product_id }}"
-                                                class=" form-control form-control-sm search itemid item_id1"
+                                                class=" form-control form-control-sm search itemid "
                                                 placeholder="@lang('site.item')" autocomplete="off">
                                             <span
                                                 id="itemid{{ $orderDetail->product_id }}">{{ $orderDetail->product->getTranslation('name') }}</span>
@@ -260,7 +260,7 @@
                                                                 <label class="aiz-megabox pl-0 mr-2" data-toggle="tooltip"
                                                                     data-title="{{ $color_name }}">
                                                                     <input type="radio"
-                                                                        name="items[{{ $orderDetail->product_id }}][color]"
+                                                                        name="items[{{$main_key}}][color]"
                                                                         value="{{ $color_name }}"
                                                                         @if (in_array($color_name, explode('-', $orderDetail->variation))) checked @endif>
                                                                     <span
@@ -289,7 +289,7 @@
                                                                 @foreach ($choice->values as $key => $value)
                                                                     <label class="aiz-megabox pl-0 mr-2">
                                                                         <input type="radio"
-                                                                            name="items[{{ $orderDetail->product_id }}][attribute]"
+                                                                            name="items[{{$main_key}}][attribute]"
                                                                             value="{{ $value }}"
                                                                             @if (in_array($value, explode('-', $orderDetail->variation))) checked @endif>
                                                                         <span
@@ -304,19 +304,19 @@
                                                 @endforeach
                                             @endif
                                         </td>
-                                        <td><input type="number" name="items[{{ $orderDetail->product_id }}][price]"
+                                        <td><input type="number" name="items[{{$main_key}}][price]"
                                                 readonly value="{{ $orderDetail->product->unit_price }}"
-                                                id="price_{{ $orderDetail->product_id }}" class="form-control changesNo"
+                                                id="price_{{ $main_key }}" class="form-control changesNo"
                                                 autocomplete="off" onkeypress="return IsNumeric(event);"
                                                 ondrop="return false;" onpaste="return false;"></td>
-                                        <td><input type="number" name="items[{{ $orderDetail->product_id }}][quantity]"
+                                        <td><input type="number" name="items[{{$main_key}}][quantity]"
                                                 value="{{ $orderDetail->quantity }}"
-                                                id="quantity_{{ $orderDetail->product_id }}"
+                                                id="quantity_{{ $main_key }}"
                                                 class="form-control changesNo" autocomplete="off"
                                                 onkeypress="return IsNumeric(event);" ondrop="return false;"
                                                 onpaste="return false;"></td>
-                                        <td><input type="number" name="items[{{ $orderDetail->product_id }}][total]"
-                                                readonly id="total_{{ $orderDetail->product_id }}"
+                                        <td><input type="number" name="items[{{$main_key}}][total]"
+                                                readonly id="total_{{ $main_key }}"
                                                 value="{{ $orderDetail->price }}" class="form-control totalLinePrice"
                                                 autocomplete="off" onkeypress="return IsNumeric(event);"
                                                 ondrop="return false;" onpaste="return false;"></td>

@@ -4,7 +4,7 @@
     <td>
 
 
-        <input  type="hidden" id="item_1"   name="items[{{$product->id}}][id]" value="{{$product->id}}" class=" form-control form-control-sm search itemid item_id1" placeholder="@lang('site.item')" autocomplete="off">
+        <input  type="hidden" id="item_1"   name="items[{{$length}}][id]" value="{{$product->id}}" class=" form-control form-control-sm search itemid items" placeholder="@lang('site.item')" autocomplete="off">
         <span id="itemid{{$product->id}}">{{ $product->getTranslation('name') }}</span>
         {{-- <div class="content-search1"> </div> --}}
         {{-- <input type="text" value="{{ $product->getTranslation('name') }}" data-type="productName" name="itemName[]" id="itemName_1" class="form-control autocomplete_txt" autocomplete="off" readonly> --}}
@@ -22,7 +22,7 @@
                             @endphp
                             <label class="aiz-megabox pl-0 mr-2" data-toggle="tooltip"
                                 data-title="{{$color_name }}">
-                                <input type="radio" name="items[{{$product->id}}][color]"
+                                <input type="radio" name="items[{{$length}}][color]"
                                     value="{{ $color_name }}"
                                     @if ($key == 0 )
                                         checked
@@ -55,7 +55,7 @@
                         @foreach ($choice->values as $key => $value)
                             <label class="aiz-megabox pl-0 mr-2">
                                 <input type="radio"
-                                    name="items[{{$product->id}}][attribute]"
+                                    name="items[{{$length}}][attribute]"
                                     value="{{ $value }}"
                                     @if ($key == 0 )
                                         checked
@@ -73,7 +73,7 @@
         @endforeach
     @endif
     </td>
-    <td><input type="number" required name="items[{{$product->id}}][price]" readonly value="{{$product->unit_price}}" id="price_{{$product->id}}" class="form-control changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></td>
-    <td><input type="number" required name="items[{{$product->id}}][quantity]" value="1" id="quantity_{{$product->id}}" class="form-control changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></td>
-    <td><input type="number" required name="items[{{$product->id}}][total]" readonly id="total_{{$product->id}}" value="{{$product->unit_price}}" class="form-control totalLinePrice" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></td>
+    <td><input type="number" required name="items[{{$length}}][price]" readonly value="{{$product->unit_price}}" id="price_{{$length}}" class="form-control changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></td>
+    <td><input type="number" required name="items[{{$length}}][quantity]" value="1" id="quantity_{{$length}}" class="form-control changesNo" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></td>
+    <td><input type="number" required name="items[{{$length}}][total]" readonly id="total_{{$length}}" value="{{$product->unit_price}}" class="form-control totalLinePrice" autocomplete="off" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"></td>
 </tr>
