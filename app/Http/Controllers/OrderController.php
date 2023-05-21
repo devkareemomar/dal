@@ -116,7 +116,6 @@ class OrderController extends Controller
         // dd(95261);
 
         return view('backend.sales.create', compact('customers'));
-
     }
 
     /**
@@ -204,7 +203,7 @@ class OrderController extends Controller
             $tax = 0;
             $shipping = 0;
             $coupon_discount = 0;
-
+            $totalPurchasePrice = 0 ;
             //Order Details Storing
             foreach ($seller_product as $cartItem) {
                 $product = Product::find($cartItem['product_id']);
@@ -235,11 +234,13 @@ class OrderController extends Controller
                 $order_detail->shipping_type = $cartItem['shipping_type'];
                 $order_detail->product_referral_code = $cartItem['product_referral_code'];
                 $order_detail->shipping_cost = $cartItem['shipping_cost'];
-
+                $order_detail->cost = $product->purchase_price;
                 $shipping += $order_detail->shipping_cost;
+                $totalPurchasePrice += $product->purchase_price * $cartItem['quantity'];
                 //End of storing shipping cost
 
                 $order_detail->quantity = $cartItem['quantity'];
+
                 $order_detail->save();
 
                 $product->num_of_sale += $cartItem['quantity'];
@@ -271,8 +272,11 @@ class OrderController extends Controller
                 }
             }
 
-            $order->grand_total = $subtotal + $tax + $shipping;
+            $order->grand_total   = $subtotal + $tax + $shipping;
             $order->shipping_cost =  $shipping;
+            $order->total_cost    =  $totalPurchasePrice;
+
+            $order->profit =  $order->grand_total - $order->total_cost;
 
             if ($seller_product[0]->coupon_code != null) {
                 $order->coupon_discount = $coupon_discount;
@@ -296,7 +300,8 @@ class OrderController extends Controller
     }
 
 
-    public function storeOrderFromAdmin(OrderRequest $request){
+    public function storeOrderFromAdmin(OrderRequest $request)
+    {
 
 
         $address = Address::where('id', $request->address_id)->first();
@@ -362,14 +367,13 @@ class OrderController extends Controller
             $tax = 0;
             $shipping = 0;
             $coupon_discount = 0;
-
+            $totalPurchasePrice =0;
 
             // dd( $seller_product);
 
             //Order Details Storing
             foreach ($seller_product as $key => $item) {
                 $product = Product::find($item['id']);
-
                 $product_variation = null;
                 if (isset($item['color'])) {
                     $product_variation = isset($item['attribute']) ? $item['color'] . '-' . $item['attribute'] : $item['color'];
@@ -404,9 +408,12 @@ class OrderController extends Controller
                 $order_detail->price = $item['total'];
                 $order_detail->tax = cart_product_tax($item, $product, false) * $item['quantity'];
                 $order_detail->shipping_type = $item['shipping_type'];
-                $order_detail->product_referral_code =0;
+                $order_detail->product_referral_code = 0;
                 $order_detail->shipping_cost = $request->shipping_cost / count($request->items);
+                $order_detail->cost = $product->purchase_price;
 
+
+                $totalPurchasePrice += $product->purchase_price * $item['quantity'];
                 $shipping = $request->shipping_cost;
                 //End of storing shipping cost
 
@@ -431,14 +438,14 @@ class OrderController extends Controller
                     $seller->num_of_sale += $item['quantity'];
                     $seller->save();
                 }
-
-
             }
 
             $order->grand_total = $subtotal + $tax + $shipping;
             $order->payment_type = 'cash_on_delivery';
             $order->payment_status = $request->payment_status;
             $order->shipping_cost =  $shipping;
+            $order->total_cost =  $totalPurchasePrice;
+            $order->profit =  $order->grand_total - $order->total_cost;
 
             // dd( 55 );
 
@@ -453,21 +460,22 @@ class OrderController extends Controller
 
     public function addCustomer(Request $request)
     {
-        $data =[
-            'name' =>$request->name,
+        $data = [
+            'name' => $request->name,
             'email' => $request->email,
+            'country_code' => '965',
+            'phone' => $request->phone,
             'password' => '123456',
         ];
         $request->request->add(['phone' => '+965' . $request->phone]);
 
-        if(User::where('email', $request->email)->first() != null){
-            $user = User::where('email', $request->email)->first();
+        if (User::where('phone', $request->phone)->first() != null) {
+            $user = User::where('phone', $request->phone)->first();
             $request->request->add(['customer_id' => $user->id]);
 
             $address =  new AddressController();
             $address->guestStore($request);
-
-        }else{
+        } else {
             $register =  new RegisterController();
             $user     = $register->create($data);
             $request->request->add(['customer_id' => $user->id]);
@@ -476,7 +484,7 @@ class OrderController extends Controller
             $address->guestStore($request);
         }
 
-        return redirect('admin/orders/create?customer_id='.$user->id);
+        return redirect('admin/orders/create?customer_id=' . $user->id);
         // return $address->id;
 
     }
@@ -553,7 +561,8 @@ class OrderController extends Controller
 
 
             OrderDetail::where('order_id', $order->id)->delete();
-            $subtotal =0;
+            $subtotal = 0;
+            $totalPurchasePrice = 0;
             foreach ($request->items as $item) {
 
                 $product = Product::find($item['id']);
@@ -577,16 +586,20 @@ class OrderController extends Controller
                     'tax' => $tax,
                     'shipping_cost' => $shipping_cost,
                     'shipping_type' => 'home_delivery',
+                    'cost' => $product->purchase_price,
                 ];
                 $subtotal += $item['total'];
+                $totalPurchasePrice += $product->purchase_price * $item['quantity'];
                 OrderDetail::create($orderDetails);
             }
             // $order->orderProductDetails()->sync($orderDetails);
         }
         // dd($subtotal);
 
-        $order->grand_total = $subtotal+$request->shipping_cost;
+        $order->grand_total = $subtotal + $request->shipping_cost;
         $order->shipping_cost =  $request->shipping_cost;
+        $order->total_cost =  $totalPurchasePrice;
+        $order->profit =  $order->grand_total - $order->total_cost;
 
         $order->save();
 
@@ -595,15 +608,22 @@ class OrderController extends Controller
         return redirect()->back();
     }
 
-    public function updateOrderShippingAddress()
+    public function updateOrderTotalCost()
     {
-        $orders = Order::all();
+        $orders = Order::with('orderDetails')->get();
 
-        foreach($orders as $order){
-           $cost =  City::where('name',json_decode($order->shipping_address,true)['city'])->first()->cost;
-        //    dd($cost);
-           Order::findOrFail($order->id)->update(['shipping_cost' => $cost]);
+        foreach ($orders as $order) {
+            $totalPurchasePrice = 0;
 
+            foreach ($order->orderDetails as $details) {
+                $product = Product::find($details->product_id);
+
+                OrderDetail::find($details->id)->update(['cost'=>$product->purchase_price]);
+                $totalPurchasePrice += $product->purchase_price * $details->quantity;
+
+            }
+
+            Order::find($order->id)->update(['total_cost'=>$totalPurchasePrice,'profit'=>$order->grand_total - $order->total_cost]);
         }
     }
 
@@ -759,11 +779,11 @@ class OrderController extends Controller
     } // end of search
 
 
-    public function additem($id,$length)
+    public function additem($id, $length)
     {
         $product =  Product::findOrFail($id);
         // dd($value);
-        return view('backend.sales.product_details', compact('product','length'));
+        return view('backend.sales.product_details', compact('product', 'length'));
     } // end of search
 
     private function update_delivery($request, $status, $order_id)

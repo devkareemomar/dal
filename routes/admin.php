@@ -307,7 +307,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     // Order
     Route::resource('orders', OrderController::class);
     Route::controller(OrderController::class)->group(function () {
-        // Route::get('/updateOrderShippingAddress', 'updateOrderShippingAddress')->name('updateOrderShippingAddress');
+        Route::get('/updateOrderTotalCost', 'updateOrderTotalCost')->name('updateOrderTotalCost');
 
 
         // All Orders
